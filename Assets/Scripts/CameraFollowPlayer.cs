@@ -11,7 +11,6 @@ public class CameraFollowPlayer : MonoBehaviour
     }
 
     // Update is called once per frame
-    //TODO: This script poops itself when the player is destroyed, prob use game over bool or smthin
     void LateUpdate()
     {
      

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3988941553894396796}
   - component: {fileID: 5909829049252724913}
   m_Layer: 0
-  m_Name: PowerUp
+  m_Name: FireRateBoost
   m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

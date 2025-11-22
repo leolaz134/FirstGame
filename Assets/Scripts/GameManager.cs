@@ -4,7 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public PlayerController player;
+    public GameObject playerObject;
     private float spawnInterval = 3f; //Interval each of seconds each enemy spawns
     private float currentSpawnTime = 0; //current time in reference to spawn time
     private float bigCountdown = 30; //time amount needed to increase spawn time
@@ -14,10 +14,9 @@ public class GameManager : MonoBehaviour
     private float xBounds = 25;
     private float zBounds = 25;
 
-
-    //TODO: Increase (or should I say decrease spawn rate) value over time
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     //maybe make a spawning a coroutine, and also increase health with spawining
+    //maybe add more enemies?
     void Start()
     {
 
@@ -52,15 +51,24 @@ public class GameManager : MonoBehaviour
     }
 
     //Spawns a Enemy prefab at a random positon until game is over
-    //TODO: Make it so it will always spawn within a certain range of the player
     void EnemySpawnRandomPosition()
     {
-        if (!player.gameOver)
+        if (!playerObject.GetComponent<PlayerController>().gameOver)
         {
             float randX = Random.Range(-xBounds, xBounds);
             float randZ = Random.Range(-zBounds, zBounds);
-            Vector3 randPos = new Vector3(randX, enemyPrefab.transform.position.y, randZ);
-            Instantiate(enemyPrefab, randPos, transform.rotation);
+            //Redo ranges if enemy spawn is too close to player, sometimes it's wonky and heavily delays spawns
+            if (randX < playerObject.transform.position.x + 5 && randX > playerObject.transform.position.x - 5 || 
+            randZ < playerObject.transform.position.z + 5 && randX > playerObject.transform.position.z - 5)
+            {
+                EnemySpawnRandomPosition();
+            }
+            else
+            {
+                Vector3 randPos = new Vector3(randX, enemyPrefab.transform.position.y, randZ);
+                Instantiate(enemyPrefab, randPos, transform.rotation);
+            }
+            
         }
     }
 

@@ -825,8 +825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   enemyPrefab: {fileID: 411471568181252698, guid: ff19896a4ad91544a921358bb725ab12, type: 3}
-  player: {fileID: 1351835182}
-  spawnRate: 1
+  playerObject: {fileID: 1351835181}
 --- !u!1 &1351835181
 GameObject:
   m_ObjectHideFlags: 0
