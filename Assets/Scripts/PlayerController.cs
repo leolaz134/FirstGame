@@ -142,6 +142,9 @@ public class PlayerController : MonoBehaviour
             } else if (powType == PowerUpType.DamageBoost)
             {
                 damage++;
+            } else if(powType == PowerUpType.Grenade)
+            {
+                //TODO: Implement grenade throwing behavior and object
             }
         }
     }

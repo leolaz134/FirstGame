@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour
     //For now this script I'll use the player instance and find with tag just to get practice with it
     //but this will probably be easier if 
     public float speed;
-    private float damageTaken;
+    public float damageTaken;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
