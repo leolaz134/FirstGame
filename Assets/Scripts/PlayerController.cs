@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,7 +9,9 @@ public class PlayerController : MonoBehaviour
     private float xBounds = 25;
     private float zBounds = 25;
     public float speed;
-    public float fireRate;
+    public float fireRateInterval;
+    public float damage = 1;
+    private float currentFireRateTime;
     public GameObject projectilePrefab;
     public static Transform instance; //Curent player physcial space/location for other parts of the program
     public bool gameOver = false;
@@ -16,13 +19,14 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        InvokeRepeating("ProjectileSpawn", 1, fireRate);
+        //InvokeRepeating("ProjectileSpawn", 1, fireRate);
         instance = transform;
     }
 
     // Update is called once per frame
     void Update()
     {
+        currentFireRateTime += Time.deltaTime;
         //Player loses control of everything at game over
         if (!gameOver)
         {
@@ -30,6 +34,11 @@ public class PlayerController : MonoBehaviour
             LookAtCursor();
             ConstrainPlayerPosition();
             GameOverCheck();
+            if(currentFireRateTime >= fireRateInterval)
+            {
+                ProjectileSpawn();
+                currentFireRateTime = 0;
+            }
         }
         
     }
@@ -116,6 +125,24 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             transform.GetComponent<HealthBar>().loseHealth(1);
+        }
+    }
+
+    //Behaviors for when player collides with powerups
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PowerUp"))
+        {
+            PowerUpType powType = other.gameObject.GetComponent<Powerup>().powerUpType;
+            Destroy(other.gameObject);
+            //Note it will start spewing bullets when you reach a certain point
+            if(powType == PowerUpType.FireRateBoost)
+            {
+                fireRateInterval -= .1f;
+            } else if (powType == PowerUpType.DamageBoost)
+            {
+                damage++;
+            }
         }
     }
 }

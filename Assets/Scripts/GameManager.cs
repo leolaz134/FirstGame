@@ -1,9 +1,12 @@
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    public List<GameObject> powerups;
     public GameObject playerObject;
     private float spawnInterval = 3f; //Interval each of seconds each enemy spawns
     private float currentSpawnTime = 0; //current time in reference to spawn time
@@ -19,7 +22,7 @@ public class GameManager : MonoBehaviour
     //maybe add more enemies?
     void Start()
     {
-
+        InvokeRepeating("PowerupSpawnRandomPosition", 3, 3);
     }
 
     // Update is called once per frame
@@ -50,7 +53,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Spawns a Enemy prefab at a random positon until game is over
+    //Spawns a Powerup prefab at a random positon until game is over
     void EnemySpawnRandomPosition()
     {
         if (!playerObject.GetComponent<PlayerController>().gameOver)
@@ -72,5 +75,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Spawn a Powerup randomly
+    void PowerupSpawnRandomPosition()
+    {
+        if (!playerObject.GetComponent<PlayerController>().gameOver)
+        {
+            int randIndex = Random.Range(0,powerups.Count);
+            GameObject powerup = powerups[randIndex];
+            float randX = Random.Range(-xBounds, xBounds);
+            float randZ = Random.Range(-zBounds, zBounds);
+            Vector3 randPos = new Vector3(randX, powerup.transform.position.y, randZ);
+            Instantiate(powerup, randPos, transform.rotation);
+        }
+    }
 
 }

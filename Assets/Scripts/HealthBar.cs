@@ -5,7 +5,7 @@ public class HealthBar : MonoBehaviour
 {
     public Slider healthSlider;
     public int maxHealth = 2;
-    public int currentHealth;
+    public float currentHealth;
     private GameObject EventSystem; //Im putting this just in case I want to do gamemanager/score stuff later
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,7 +23,7 @@ public class HealthBar : MonoBehaviour
     }
 
     //decrements health and destroys object only if below 0 and its an enemy
-    public void loseHealth(int amount)
+    public void loseHealth(float amount)
     {
         currentHealth -= amount;
         healthSlider.value = currentHealth;
