@@ -825,6 +825,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   enemyPrefab: {fileID: 411471568181252698, guid: ff19896a4ad91544a921358bb725ab12, type: 3}
+  powerups:
+  - {fileID: 8239220632907806808, guid: 3ecf46ac15487fe498a98f6f98c79026, type: 3}
+  - {fileID: 6356755390189764045, guid: 4db65234d8f34964aa8cd87ff270998b, type: 3}
+  - {fileID: 2053932975665794286, guid: 4f694353e7dae22469a75cba1de090d4, type: 3}
   playerObject: {fileID: 1351835181}
 --- !u!1 &1351835181
 GameObject:
@@ -861,8 +865,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   speed: 6
-  fireRate: 1
+  damage: 1
+  fireRateInterval: 1
   projectilePrefab: {fileID: 7848038693633522552, guid: cf0ec63e3a4d01f4e991bebf2ac23ebf, type: 3}
+  grenade: {fileID: 383594135429518574, guid: 739bb8496b95e134fb85c85125720809, type: 3}
+  grenadeThrowForce: 500
   gameOver: 0
 --- !u!65 &1351835183
 BoxCollider:

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,11 +9,13 @@ public class PlayerController : MonoBehaviour
     private Vector3 mouseScreenPosition; //Vector of where mouse is on screen in relation to camera
     private float xBounds = 25;
     private float zBounds = 25;
-    public float speed;
-    public float fireRateInterval;
-    public float damage = 1;
     private float currentFireRateTime;
+    public float speed;
+    public float damage = 1;
+    public float fireRateInterval;    
     public GameObject projectilePrefab;
+    public GameObject grenade; //Grenade object to be thrown
+    public float grenadeThrowForce;
     public static Transform instance; //Curent player physcial space/location for other parts of the program
     public bool gameOver = false;
 
@@ -142,9 +145,17 @@ public class PlayerController : MonoBehaviour
             } else if (powType == PowerUpType.DamageBoost)
             {
                 damage++;
-            } else if(powType == PowerUpType.Grenade)
+            } else if(powType == PowerUpType.GrenadePowerup)
             {
-                //TODO: Implement grenade throwing behavior and object
+                Vector3 spawnPos = transform.position + transform.forward * 1f;
+                GameObject thrownGrenade = Instantiate(grenade, spawnPos, transform.rotation);
+                Rigidbody grenadeRb = thrownGrenade.GetComponent<Rigidbody>();
+                grenadeRb.AddForce(transform.forward * grenadeThrowForce);
+            } else if (powType == PowerUpType.SpinningBlades)
+            {
+                //TODO: Implment Spinning blades
+                //Decided if it should spawn for you to use and then subsquent upgrades boost it or have it go for
+                //a certain amount of time
             }
         }
     }

@@ -10,9 +10,9 @@ public class GameManager : MonoBehaviour
     public GameObject playerObject;
     private float spawnInterval = 3f; //Interval each of seconds each enemy spawns
     private float currentSpawnTime = 0; //current time in reference to spawn time
-    private float bigCountdown = 30; //time amount needed to increase spawn time
+    private float bigCountdown = 20; //time amount needed to increase spawn time
     private float currentBigTime = 0; //current time in reference to big countdown
-    private float healthIncreaseTime = 60;//time amount to increase enemy health
+    private float healthIncreaseTime = 20;//time amount to increase enemy health
     private float currentHealthTime = 0;//current time in reference to health increase time
     private float xBounds = 25;
     private float zBounds = 25;
@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         InvokeRepeating("PowerupSpawnRandomPosition", 3, 3);
+        StartCoroutine("TimeCount");
     }
 
     // Update is called once per frame
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     {
         currentSpawnTime += Time.deltaTime;
         currentBigTime += Time.deltaTime;
+        currentHealthTime += Time.deltaTime;
 
         //this section spawns an enemy for the interval
         if (currentSpawnTime >= spawnInterval)
@@ -86,6 +88,17 @@ public class GameManager : MonoBehaviour
             float randZ = Random.Range(-zBounds, zBounds);
             Vector3 randPos = new Vector3(randX, powerup.transform.position.y, randZ);
             Instantiate(powerup, randPos, transform.rotation);
+        }
+    }
+
+    //Standard time count for the game, recording every second
+    IEnumerator TimeCount()
+    {
+        int time = 0;
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            Debug.Log(++time);
         }
     }
 

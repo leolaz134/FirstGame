@@ -1,7 +1,7 @@
 using UnityEngine;
 public enum PowerUpType
 {
-    Grenade,
+    GrenadePowerup,
     SpinningBlades,
     FireRateBoost,
     DamageBoost

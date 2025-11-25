@@ -33,6 +33,8 @@ public class GrenadeBehavior : MonoBehaviour
                 enemies[i].GetComponent<HealthBar>().loseHealth(enemies[i].GetComponent<Enemy>().damageTaken);
             }
         }
+
+        Destroy(gameObject);
         
     }
 }
