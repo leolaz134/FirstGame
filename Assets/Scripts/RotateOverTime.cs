@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RotateOverTime : MonoBehaviour
+public class RotateOvertime : MonoBehaviour
 {
     public float rotationSpeed;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -12,6 +12,6 @@ public class RotateOverTime : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(Vector3.right, rotationSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
     }
 }

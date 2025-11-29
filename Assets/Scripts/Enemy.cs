@@ -3,7 +3,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     //For now this script I'll use the player instance and find with tag just to get practice with it
-    //but this will probably be easier if 
+    //but this will probably be easier if I just have a public reference
+    //Also the way I do health is weird, next prob have loss of health happen in ability to different damage instances
     public float speed;
     public float damageTaken;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

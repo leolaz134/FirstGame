@@ -12,10 +12,14 @@ public class GameManager : MonoBehaviour
     private float currentSpawnTime = 0; //current time in reference to spawn time
     private float bigCountdown = 20; //time amount needed to increase spawn time
     private float currentBigTime = 0; //current time in reference to big countdown
-    private float healthIncreaseTime = 20;//time amount to increase enemy health
-    private float currentHealthTime = 0;//current time in reference to health increase time
+    private float difficultyIncreaseTime = 20;//time amount to increase enemy health
+    private float currentDifficultyTime = 0;//current time in reference to health increase time
     private float xBounds = 25;
     private float zBounds = 25;
+
+    public int startingMaxHealth = 2;
+    public int startingMaxSpeed = 3;
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     //maybe make a spawning a coroutine, and also increase health with spawining
@@ -24,6 +28,8 @@ public class GameManager : MonoBehaviour
     {
         InvokeRepeating("PowerupSpawnRandomPosition", 3, 3);
         StartCoroutine("TimeCount");
+        enemyPrefab.GetComponent<HealthBar>().maxHealth = startingMaxHealth;
+        enemyPrefab.GetComponent<Enemy>().speed = startingMaxSpeed;
     }
 
     // Update is called once per frame
@@ -31,7 +37,7 @@ public class GameManager : MonoBehaviour
     {
         currentSpawnTime += Time.deltaTime;
         currentBigTime += Time.deltaTime;
-        currentHealthTime += Time.deltaTime;
+        currentDifficultyTime += Time.deltaTime;
 
         //this section spawns an enemy for the interval
         if (currentSpawnTime >= spawnInterval)
@@ -48,14 +54,16 @@ public class GameManager : MonoBehaviour
         }
         
         //this section increases enemy health after a certain amount of time
-        if (currentHealthTime >= healthIncreaseTime)
+        if (currentDifficultyTime >= difficultyIncreaseTime)
         {
             enemyPrefab.GetComponent<HealthBar>().maxHealth++;
-            currentHealthTime = 0;
+            enemyPrefab.GetComponent<Enemy>().speed++;
+            currentDifficultyTime = 0;
         }
     }
 
     //Spawns a Powerup prefab at a random positon until game is over
+    //TODO: Either make a better spawning random position or increase spawn rate increase overtime
     void EnemySpawnRandomPosition()
     {
         if (!playerObject.GetComponent<PlayerController>().gameOver)

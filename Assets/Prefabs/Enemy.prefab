@@ -170,6 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   speed: 3
+  damageTaken: 0
 --- !u!1001 &7937730298757854087
 PrefabInstance:
   m_ObjectHideFlags: 0

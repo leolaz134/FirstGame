@@ -617,8 +617,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81f4b517ec977f3429559abb4b386cb7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RotateOverTime
-  rotationSpeed: 10
+  m_EditorClassIdentifier: Assembly-CSharp::LightRotation
+  rotationSpeed: 5
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -829,7 +829,10 @@ MonoBehaviour:
   - {fileID: 8239220632907806808, guid: 3ecf46ac15487fe498a98f6f98c79026, type: 3}
   - {fileID: 6356755390189764045, guid: 4db65234d8f34964aa8cd87ff270998b, type: 3}
   - {fileID: 2053932975665794286, guid: 4f694353e7dae22469a75cba1de090d4, type: 3}
+  - {fileID: 4485512048825555831, guid: ddbc6da7af276a743a7e60da9d7b375b, type: 3}
   playerObject: {fileID: 1351835181}
+  startingMaxHealth: 2
+  startingMaxSpeed: 3
 --- !u!1 &1351835181
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,6 +873,10 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7848038693633522552, guid: cf0ec63e3a4d01f4e991bebf2ac23ebf, type: 3}
   grenade: {fileID: 383594135429518574, guid: 739bb8496b95e134fb85c85125720809, type: 3}
   grenadeThrowForce: 500
+  bladePrefab: {fileID: 5296139186811986227, guid: 231406c3f2c3b0f47ad277996cc21fb2, type: 3}
+  activeBlades: []
+  bladesRotationSpeed: 200
+  bladePivot: {fileID: 1874312994}
   gameOver: 0
 --- !u!65 &1351835183
 BoxCollider:
@@ -1011,6 +1018,37 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5621178481530569721, guid: ef94ece1b1013324999cdbca40428a39, type: 3}
   m_PrefabInstance: {fileID: 399523904}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1874312993
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1874312994}
+  m_Layer: 0
+  m_Name: BladePivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1874312994
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1874312993}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2125677144 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7216148654501270636, guid: ef94ece1b1013324999cdbca40428a39, type: 3}
@@ -1033,3 +1071,4 @@ SceneRoots:
   - {fileID: 1351835186}
   - {fileID: 126726779}
   - {fileID: 988857824}
+  - {fileID: 1874312994}

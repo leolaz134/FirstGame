@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -12,11 +14,16 @@ public class PlayerController : MonoBehaviour
     private float currentFireRateTime;
     public float speed;
     public float damage = 1;
-    public float fireRateInterval;    
+    public float fireRateInterval;
     public GameObject projectilePrefab;
     public GameObject grenade; //Grenade object to be thrown
     public float grenadeThrowForce;
+    public GameObject bladePrefab;
+    //Do i need a list for this?
+    public List<GameObject> activeBlades;
+    public float bladesRotationSpeed;
     public static Transform instance; //Curent player physcial space/location for other parts of the program
+    public Transform bladePivot;
     public bool gameOver = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,13 +44,18 @@ public class PlayerController : MonoBehaviour
             LookAtCursor();
             ConstrainPlayerPosition();
             GameOverCheck();
-            if(currentFireRateTime >= fireRateInterval)
+            if (currentFireRateTime >= fireRateInterval)
             {
                 ProjectileSpawn();
                 currentFireRateTime = 0;
             }
         }
-        
+    }
+
+    void LateUpdate()
+    {
+        bladePivot.position = transform.position;
+        bladePivot.Rotate(Vector3.up, bladesRotationSpeed * Time.deltaTime);
     }
 
     public void ProjectileSpawn()
@@ -80,7 +92,7 @@ public class PlayerController : MonoBehaviour
             transform.position = new Vector3(transform.position.x, transform.position.y, -zBounds);
         }
 
-        if(transform.position.z > zBounds)
+        if (transform.position.z > zBounds)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, zBounds);
         }
@@ -92,7 +104,7 @@ public class PlayerController : MonoBehaviour
     //If it's set up any other way I must use Rays
     void LookAtCursor()
     {
-        
+
 
         //Get current mouse position on screen pixels
         mouseScreenPosition = Input.mousePosition;
@@ -138,24 +150,47 @@ public class PlayerController : MonoBehaviour
         {
             PowerUpType powType = other.gameObject.GetComponent<Powerup>().powerUpType;
             Destroy(other.gameObject);
-            //Note it will start spewing bullets when you reach a certain point
-            if(powType == PowerUpType.FireRateBoost)
+            //Note: it will start spewing bullets when you reach a certain point
+            if (powType == PowerUpType.FireRateBoost)
             {
                 fireRateInterval -= .1f;
-            } else if (powType == PowerUpType.DamageBoost)
+            }
+            else if (powType == PowerUpType.DamageBoost)
             {
                 damage++;
-            } else if(powType == PowerUpType.GrenadePowerup)
+            }
+            //Note: Sometimes doesn't spawn? It could be me imagining stuff
+            else if (powType == PowerUpType.GrenadePowerup)
             {
                 Vector3 spawnPos = transform.position + transform.forward * 1f;
                 GameObject thrownGrenade = Instantiate(grenade, spawnPos, transform.rotation);
                 Rigidbody grenadeRb = thrownGrenade.GetComponent<Rigidbody>();
                 grenadeRb.AddForce(transform.forward * grenadeThrowForce);
-            } else if (powType == PowerUpType.SpinningBlades)
+            }
+            else if (powType == PowerUpType.SpinningBlades)
             {
-                //TODO: Implment Spinning blades
-                //Decided if it should spawn for you to use and then subsquent upgrades boost it or have it go for
-                //a certain amount of time
+                //Distance it rotates from pivot
+                float radius = 2.5f;
+                //instantiate object as child of pivo
+                GameObject tempBlade = Instantiate(bladePrefab, bladePivot);
+                //add it to current blade instance
+                activeBlades.Add(tempBlade);
+                
+
+                for(int i = 0; i < activeBlades.Count; i++)
+                {
+                    //Get angle, convert it to radians, and then multiply it by radius to get proper position
+                    //cos for x position, sin for z position
+                    float angle = i * (360 / activeBlades.Count);
+                    float angleRad = angle * Mathf.Deg2Rad;
+                    activeBlades[i].transform.localPosition = new Vector3(radius * Mathf.Cos(angleRad), 0, radius * Mathf.Sin(angleRad));
+                    activeBlades[i].transform.rotation = Quaternion.identity;
+                }
+
+                if (activeBlades.Count > 1)
+                {
+                    bladesRotationSpeed += 50;
+                }
             }
         }
     }
