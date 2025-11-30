@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
         {
             PowerUpType powType = other.gameObject.GetComponent<Powerup>().powerUpType;
             Destroy(other.gameObject);
-            //Note: it will start spewing bullets when you reach a certain point
+            //Note: it will start spewing bullets like a beam when you reach a certain point
             if (powType == PowerUpType.FireRateBoost)
             {
                 fireRateInterval -= .1f;
@@ -159,7 +159,6 @@ public class PlayerController : MonoBehaviour
             {
                 damage++;
             }
-            //Note: Sometimes doesn't spawn? It could be me imagining stuff
             else if (powType == PowerUpType.GrenadePowerup)
             {
                 Vector3 spawnPos = transform.position + transform.forward * 1f;

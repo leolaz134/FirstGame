@@ -10,16 +10,16 @@ public class GameManager : MonoBehaviour
     public GameObject playerObject;
     private float spawnInterval = 3f; //Interval each of seconds each enemy spawns
     private float currentSpawnTime = 0; //current time in reference to spawn time
-    private float bigCountdown = 20; //time amount needed to increase spawn time
+    private float bigCountdown = 10; //time amount needed to increase spawn time
     private float currentBigTime = 0; //current time in reference to big countdown
-    private float difficultyIncreaseTime = 20;//time amount to increase enemy health
+    private float difficultyIncreaseTime = 20;//time amount to increase enemy health and speed
     private float currentDifficultyTime = 0;//current time in reference to health increase time
     private float xBounds = 25;
     private float zBounds = 25;
 
     public int startingMaxHealth = 2;
     public int startingMaxSpeed = 3;
-    
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     //maybe make a spawning a coroutine, and also increase health with spawining
@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
     {
         InvokeRepeating("PowerupSpawnRandomPosition", 3, 3);
         StartCoroutine("TimeCount");
+        //Since I modify prefabs I must set the orignanl values back here
+        //Maybe there's an easier way to do this?
         enemyPrefab.GetComponent<HealthBar>().maxHealth = startingMaxHealth;
         enemyPrefab.GetComponent<Enemy>().speed = startingMaxSpeed;
     }
@@ -52,7 +54,7 @@ public class GameManager : MonoBehaviour
             spawnInterval -= .25f;
             currentBigTime = 0;
         }
-        
+
         //this section increases enemy health after a certain amount of time
         if (currentDifficultyTime >= difficultyIncreaseTime)
         {
@@ -66,23 +68,29 @@ public class GameManager : MonoBehaviour
     //TODO: Either make a better spawning random position or increase spawn rate increase overtime
     void EnemySpawnRandomPosition()
     {
-        if (!playerObject.GetComponent<PlayerController>().gameOver)
+        if (playerObject.GetComponent<PlayerController>().gameOver)
+        {
+            return;
+        }
+        int maxAttempts = 10;
+        int minSpawnDistance = 5;
+
+        //Within max attempts, try to find a valid spawn position
+        //otherwise spawn it in that close range
+        for (int i = 0; i < maxAttempts; i++)
         {
             float randX = Random.Range(-xBounds, xBounds);
             float randZ = Random.Range(-zBounds, zBounds);
-            //Redo ranges if enemy spawn is too close to player, sometimes it's wonky and heavily delays spawns
-            if (randX < playerObject.transform.position.x + 5 && randX > playerObject.transform.position.x - 5 || 
-            randZ < playerObject.transform.position.z + 5 && randX > playerObject.transform.position.z - 5)
+            Vector3 randPos = new Vector3(randX, enemyPrefab.transform.position.y, randZ);
+
+            if (Vector3.Distance(randPos, playerObject.transform.position) >= minSpawnDistance)
             {
-                EnemySpawnRandomPosition();
-            }
-            else
-            {
-                Vector3 randPos = new Vector3(randX, enemyPrefab.transform.position.y, randZ);
                 Instantiate(enemyPrefab, randPos, transform.rotation);
+                return;
             }
-            
         }
+        //Just defaults to spawning it 5 units away on the x axis
+        Instantiate(enemyPrefab, playerObject.transform.position + new Vector3(minSpawnDistance, 0, 0), transform.rotation);
     }
 
     //Spawn a Powerup randomly
@@ -90,7 +98,7 @@ public class GameManager : MonoBehaviour
     {
         if (!playerObject.GetComponent<PlayerController>().gameOver)
         {
-            int randIndex = Random.Range(0,powerups.Count);
+            int randIndex = Random.Range(0, powerups.Count);
             GameObject powerup = powerups[randIndex];
             float randX = Random.Range(-xBounds, xBounds);
             float randZ = Random.Range(-zBounds, zBounds);
