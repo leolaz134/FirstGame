@@ -20,10 +20,10 @@ public class GameManager : MonoBehaviour
     public int startingMaxHealth = 2;
     public int startingMaxSpeed = 3;
 
+    //TODO: Make the game work with the UI, such as spawning everything in when play is pressed
+    //and having a game over screen with a restart button
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    //maybe make a spawning a coroutine, and also increase health with spawining
-    //maybe add more enemies?
     void Start()
     {
         InvokeRepeating("PowerupSpawnRandomPosition", 3, 3);
