@@ -6,31 +6,34 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float speed = 6;
+    public float damage = 1;
+    public float fireRateInterval = 1;
+    public GameObject projectilePrefab;
+    public GameObject grenade; //Grenade object to be thrown
+    public float grenadeThrowForce;
+    public GameObject bladePrefab;
+    public GameObject bladePivotPrefab;
+    public List<GameObject> activeBlades; //Do i need a list for this?
+    public float bladesRotationSpeed;
+    public static Transform instance; //Curent player physcial space/location for other parts of the program
+    public bool gameOver = false;
     private float horizontalInput;
     private float verticalInput;
     private Vector3 mouseScreenPosition; //Vector of where mouse is on screen in relation to camera
     private float xBounds = 25;
     private float zBounds = 25;
     private float currentFireRateTime;
-    public float speed;
-    public float damage = 1;
-    public float fireRateInterval;
-    public GameObject projectilePrefab;
-    public GameObject grenade; //Grenade object to be thrown
-    public float grenadeThrowForce;
-    public GameObject bladePrefab;
-    //Do i need a list for this?
-    public List<GameObject> activeBlades;
-    public float bladesRotationSpeed;
-    public static Transform instance; //Curent player physcial space/location for other parts of the program
-    public Transform bladePivot;
-    public bool gameOver = false;
+    private GameObject bladePivotInstance;
+
+    //TODO: See if there's a to get the blade pivot to be a child of player rather than instantiating it separately,
+    //and check over everything to see if there's anything I can do better    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //InvokeRepeating("ProjectileSpawn", 1, fireRate);
         instance = transform;
+        bladePivotInstance = Instantiate(bladePivotPrefab, bladePivotPrefab.transform.position, Quaternion.identity);
     }
 
     // Update is called once per frame
@@ -54,8 +57,8 @@ public class PlayerController : MonoBehaviour
 
     void LateUpdate()
     {
-        bladePivot.position = transform.position;
-        bladePivot.Rotate(Vector3.up, bladesRotationSpeed * Time.deltaTime);
+        bladePivotInstance.transform.position = transform.position;
+        bladePivotInstance.transform.Rotate(Vector3.up, bladesRotationSpeed * Time.deltaTime);
     }
 
     public void ProjectileSpawn()
@@ -170,8 +173,8 @@ public class PlayerController : MonoBehaviour
             {
                 //Distance it rotates from pivot
                 float radius = 2.5f;
-                //instantiate object as child of pivo
-                GameObject tempBlade = Instantiate(bladePrefab, bladePivot);
+                //instantiate object as child of pivot
+                GameObject tempBlade = Instantiate(bladePrefab, bladePivotInstance.transform);
                 //add it to current blade instance
                 activeBlades.Add(tempBlade);
                 
