@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public GameObject player;
+    public GameObject player; ///This is reassigned in start game to make reference to the instantiated player
     public GameObject bladePivot;
     public GameObject titleScreen;
+    public GameObject looseScreen;
     public new GameObject camera;
     public List<GameObject> powerups;
     private float spawnInterval = 3f; //Interval each of seconds each enemy spawns
@@ -25,7 +26,6 @@ public class GameManager : MonoBehaviour
 
 
     //TODO: Make a restart screen when you die
-    //use SceneManager.LoadScene(SceneManager.GetActiveScene().name); for restart button functionality
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //Start game logic when play button is started
-        if (gameStarted)
+        if (gameStarted && !player.GetComponent<PlayerController>().gameOver)
         {
             currentSpawnTime += Time.deltaTime;
             currentBigTime += Time.deltaTime;
@@ -65,6 +65,9 @@ public class GameManager : MonoBehaviour
                 speedIncreaseAmount++;
                 currentDifficultyTime = 0;
             }
+        } else if(player.GetComponent<PlayerController>().gameOver)
+        {
+            looseScreen.SetActive(true);
         }
     }
 
@@ -119,9 +122,15 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         gameStarted = true;
-        Instantiate(player, player.transform.position, Quaternion.identity);
+        player = Instantiate(player, player.transform.position, Quaternion.identity);
         titleScreen.SetActive(false);
         camera.GetComponent<CameraFollowPlayer>().target = GameObject.FindWithTag("Player");
+    }
+
+    //Method to restart the game when restart button is pressed
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     //Standard time count for the game, recording every second

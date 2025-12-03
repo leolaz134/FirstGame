@@ -26,8 +26,7 @@ public class PlayerController : MonoBehaviour
     private float currentFireRateTime;
     private GameObject bladePivotInstance;
 
-    //TODO: See if there's a to get the blade pivot to be a child of player rather than instantiating it separately,
-    //and check over everything to see if there's anything I can do better    
+    //NOTE: Currently in the prefab I have a canvas child obejct for health bar, IT SHOULD NOT BE THERE for editing purposes and future projects
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -172,7 +171,7 @@ public class PlayerController : MonoBehaviour
             else if (powType == PowerUpType.SpinningBlades)
             {
                 //Distance it rotates from pivot
-                float radius = 2.5f;
+                float radius = 4f;
                 //instantiate object as child of pivot
                 GameObject tempBlade = Instantiate(bladePrefab, bladePivotInstance.transform);
                 //add it to current blade instance
