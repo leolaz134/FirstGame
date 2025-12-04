@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,9 +8,11 @@ public class GameManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public GameObject player; ///This is reassigned in start game to make reference to the instantiated player
+    private GameObject playerInstance;
     public GameObject bladePivot;
     public GameObject titleScreen;
     public GameObject looseScreen;
+    public TextMeshProUGUI timeText;
     public new GameObject camera;
     public List<GameObject> powerups;
     private float spawnInterval = 3f; //Interval each of seconds each enemy spawns
@@ -38,7 +41,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //Start game logic when play button is started
-        if (gameStarted && !player.GetComponent<PlayerController>().gameOver)
+        if (gameStarted && !playerInstance.GetComponent<PlayerController>().gameOver)
         {
             currentSpawnTime += Time.deltaTime;
             currentBigTime += Time.deltaTime;
@@ -65,19 +68,17 @@ public class GameManager : MonoBehaviour
                 speedIncreaseAmount++;
                 currentDifficultyTime = 0;
             }
-        } else if(player.GetComponent<PlayerController>().gameOver)
+        } else if(playerInstance != null && playerInstance.GetComponent<PlayerController>().gameOver)
         {
+            //I probably should've put this as a seperate game over method but whatever
             looseScreen.SetActive(true);
+            timeText.gameObject.SetActive(false);
         }
     }
 
     //Spawns Enemies prefab at a random positon until game is over
     void EnemySpawnRandomPosition()
     {
-        if (player.GetComponent<PlayerController>().gameOver)
-        {
-            return;
-        }
         int maxAttempts = 10;
         int minSpawnDistance = 5;
         //setting current spawn distance to the minimum distance initially
@@ -107,7 +108,7 @@ public class GameManager : MonoBehaviour
     //Spawn a Powerup prefab randomly
     void PowerupSpawnRandomPosition()
     {
-        if (!player.GetComponent<PlayerController>().gameOver)
+        if (!playerInstance.GetComponent<PlayerController>().gameOver)
         {
             int randIndex = Random.Range(0, powerups.Count);
             GameObject powerup = powerups[randIndex];
@@ -122,8 +123,10 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         gameStarted = true;
-        player = Instantiate(player, player.transform.position, Quaternion.identity);
+        playerInstance = Instantiate(player, player.transform.position, Quaternion.identity);
         titleScreen.SetActive(false);
+        timeText.gameObject.SetActive(true);
+        //probably could've set this to player instance directly
         camera.GetComponent<CameraFollowPlayer>().target = GameObject.FindWithTag("Player");
     }
 
@@ -141,6 +144,7 @@ public class GameManager : MonoBehaviour
         int time = 0;
         while (true)
         {
+            timeText.text = "Time: " + time;
             yield return new WaitForSeconds(1f);
             Debug.Log(++time);
         }

@@ -26,7 +26,6 @@ public class SpinningBladesBehavior : MonoBehaviour
         {
             GameObject enemy = other.gameObject;
             enemy.GetComponent<HealthBar>().loseHealth(other.gameObject.GetComponent<Enemy>().damageTaken);
-            Debug.Log("Hit");
         }
     }
 }
