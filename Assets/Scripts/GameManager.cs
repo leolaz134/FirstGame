@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
         {
             timeText.text = "Time: " + time;
             yield return new WaitForSeconds(1f);
-            Debug.Log(++time);
+            ++time;
         }
     }
 
